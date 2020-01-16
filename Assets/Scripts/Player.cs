@@ -29,6 +29,7 @@ public class Player : MonoBehaviour
     private float _playerTwoCanFire = -1;
     private int _p1Ammo = 15;
     private int _p2Ammo = 15;
+    private int _shieldHealth = 3;
    
 
     [SerializeField]
@@ -77,11 +78,14 @@ public class Player : MonoBehaviour
     private AudioClip _damageClip;
     [SerializeField]
     private AudioClip _healClip;
+    [SerializeField]
+    private AudioClip _shieldBrokenClip;
 
     public bool isPlayerOne = false;
     public bool isPlayerTwo = false;
 
     private CameraShake _cameraShake;
+    private SpriteRenderer _shieldColor;
 
 
 
@@ -110,6 +114,12 @@ public class Player : MonoBehaviour
                 break;
             default:
                 break;
+        }
+
+        _shieldColor = _shieldVisualizer.GetComponent<SpriteRenderer>();
+        if (_shieldColor == null)
+        {
+            Debug.LogError("the Color on shield is NULL");
         }
 
         _cameraShake = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraShake>();
@@ -376,15 +386,32 @@ public class Player : MonoBehaviour
     {
         if (_isShieldActive)
         {
-            _shieldVisualizer.SetActive(false);
-            _isShieldActive = false;
-            return;
+            if (_shieldHealth > 0)
+            {
+                _shieldHealth -= 1;               
+                if (_shieldHealth == 2)
+                {
+                    _shieldColor.color = Color.cyan;
+                }
+                if (_shieldHealth == 1)
+                {
+                    _shieldColor.color = Color.red;
+                }
+            }
+            else
+            {
+                _audioSource.clip = _shieldBrokenClip;
+                _audioSource.Play();
+                _shieldVisualizer.SetActive(false);
+                _isShieldActive = false;
+                return;
+            }
         }
         else
         {
             _lives--;
             //shake the camera.
-            StartCoroutine(_cameraShake.Shake(1.0f, 0.25f));
+            StartCoroutine(_cameraShake.Shake(1.0f, 0.15f));
             _audioSource.clip = _damageClip;
             _audioSource.Play();
             CheckDamageVisuals();        
@@ -419,11 +446,14 @@ public class Player : MonoBehaviour
 
     public void RefillHealth()
     {
-        _lives ++;
-        _uiManager.UpdateLives(_lives);
-        CheckDamageVisuals();
-        _audioSource.clip = _healClip;
-        _audioSource.Play();
+        if (_lives < 3)
+        {
+            _lives++;
+            _uiManager.UpdateLives(_lives);
+            CheckDamageVisuals();
+            _audioSource.clip = _healClip;
+            _audioSource.Play();
+        }
     }
 
     IEnumerator ThrusterCoolDownRoutine()
@@ -475,6 +505,8 @@ public class Player : MonoBehaviour
 
     public void ShieldsActive()
     {
+        _shieldHealth = 3;
+        _shieldColor.color = Color.green;
         _shieldVisualizer.SetActive(true);
         _isShieldActive = true;
     }

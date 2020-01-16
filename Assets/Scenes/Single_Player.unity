@@ -2602,6 +2602,7 @@ MonoBehaviour:
   _cameraShakeClip: {fileID: 8300000, guid: 1e07fe8dc298b364e8209cb6605af477, type: 3}
   _damageClip: {fileID: 8300000, guid: af64256d8a1a99b4a8ce426f0b7b9478, type: 3}
   _healClip: {fileID: 8300000, guid: d9b998d68d2ea3049aaac64b3a69d299, type: 3}
+  _shieldBrokenClip: {fileID: 8300000, guid: 0d940e90743857a498c50d68b698cd27, type: 3}
   isPlayerOne: 1
   isPlayerTwo: 0
 --- !u!61 &1861430545
@@ -3307,7 +3308,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: 333b0196b7a764df5a7768ead9b69dbc, type: 3}
-  m_Color: {r: 1, g: 0, b: 0.09450579, a: 1}
+  m_Color: {r: 0.14912093, g: 1, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
