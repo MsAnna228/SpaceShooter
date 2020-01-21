@@ -25,22 +25,22 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text _gameOverText;
     [SerializeField]
+    private Text _waveNumberText;
+    [SerializeField]
     private Button _restartButton;
     [SerializeField]
     private Scene scene;
     [SerializeField]
-    private GameManager _gameManager;
+    private GameManager _gameManager;   
     private int _currentScore;
     private int _highScore;
     private Color p1Color = Color.green;
     private Color p2Color = Color.green;
 
-
-
-    // Start is called before the first frame update
     void Start()
     {
         _gameOverText.gameObject.SetActive(false);
+        _waveNumberText.gameObject.SetActive(false);
         _scoreText.text = "Score: " + 0;
         _highScoreText.text = "Best: " + PlayerPrefs.GetInt("HighScore");
         _restartButton.gameObject.SetActive(false);
@@ -85,16 +85,15 @@ public class UIManager : MonoBehaviour
         _playerTwoThrusterBar.color = p2Color;
     }
 
-    public void UpdateP1Ammo(float ammo)
+    public void UpdateP1Ammo(float ammo, float maxAmmo)
     {
-        _p1AmmoText.text = "Spears: " + ammo.ToString();
+        _p1AmmoText.text = "Spears: " + ammo.ToString() + "/" + maxAmmo.ToString();
     }
 
-    public void UpdateP2Ammo(float ammo)
+    public void UpdateP2Ammo(float ammo, float maxAmmo)
     {
-        _p2AmmoText.text = "Spears: " + ammo.ToString();
+        _p2AmmoText.text = "Spears: " + ammo.ToString() + "/" + maxAmmo.ToString();
     }
-
 
     public void GameOver()
     {
@@ -103,6 +102,19 @@ public class UIManager : MonoBehaviour
         _restartButton.gameObject.SetActive(true);
         StartCoroutine(FlickerGameOverTextRoutine());
         _gameManager.GameOver();
+    }
+
+    public void NextWave(int currentWave, int maxWave)
+    {
+        _waveNumberText.text = "Wave: " + currentWave.ToString() + "/" + maxWave.ToString();
+        StartCoroutine(WaveTextShowRoutine());
+    }
+
+    IEnumerator WaveTextShowRoutine()
+    {
+        _waveNumberText.gameObject.SetActive(true);
+        yield return new WaitForSeconds(1.0f);
+        _waveNumberText.gameObject.SetActive(false);
     }
 
     IEnumerator FlickerGameOverTextRoutine()

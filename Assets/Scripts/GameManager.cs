@@ -21,7 +21,6 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        //_pauseMenu.SetActive(false);
         _pauseButton.SetActive(true);
         _pauseMenuAnimator = GameObject.Find("Pause_Menu_Panel").GetComponent<Animator>();
         _pauseMenuAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
@@ -29,11 +28,6 @@ public class GameManager : MonoBehaviour
 
     public void Update()
     {
-        if(Input.GetKeyDown(KeyCode.R) && _isGameOver == true)
-        {
-            
-        }
-
         if (Input.GetKey(KeyCode.Escape))
         {
             _currentScene = SceneManager.GetActiveScene();
@@ -62,7 +56,6 @@ public class GameManager : MonoBehaviour
 
     public void OnPauseButtonClicked()
     {
-        //_pauseMenu.SetActive(true);
         _pauseMenuAnimator.SetBool("isPaused", true);
         _pauseButton.SetActive(false);
         Time.timeScale = 0.0f;
@@ -70,12 +63,9 @@ public class GameManager : MonoBehaviour
 
     public void OnResumeButtonClicked()
     {
-
         _pauseMenuAnimator.SetBool("isPaused", false);
-        //_pauseMenu.SetActive(false);
         _pauseButton.SetActive(true);
         Time.timeScale = 1.0f;
-
     }
 
     public void OnMainMenuButtonClicked()
@@ -85,7 +75,6 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        _isGameOver = true;
-        
+        _isGameOver = true;        
     }
 }

@@ -29,13 +29,13 @@ public class Player : MonoBehaviour
     private float _playerTwoCanFire = -1;
     private int _p1Ammo = 15;
     private int _p2Ammo = 15;
-    private int _shieldHealth = 3;
-   
+    private int _p1MaxAmmo = 15; //can be upgradeable
+    private int _p2MaxAmmo = 15;
+    private int _shieldHealth = 3;   
 
     [SerializeField]
     private Image _thrusterBar;
     private float _thrusterAmount = 100.0f; //this could be upgradeable
-
 
     [SerializeField]
     private int _lives = 3;    
@@ -59,7 +59,6 @@ public class Player : MonoBehaviour
     private SpawnManager _spawnManager;
     private UIManager _uiManager;
     private int coolDownTime;
-    //private Image playerOneThrusterBar;
 
 
     [SerializeField]
@@ -86,8 +85,6 @@ public class Player : MonoBehaviour
 
     private CameraShake _cameraShake;
     private SpriteRenderer _shieldColor;
-
-
 
     
     void Start()
@@ -172,7 +169,6 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        // if player 1
         if (isPlayerOne)
         {
             CalculateMovement();
@@ -207,7 +203,7 @@ public class Player : MonoBehaviour
                 Instantiate(_laserPrefab, (new Vector3((transform.position.x - 0.5f), (transform.position.y + 0.5f), 0)), Quaternion.identity);
             }
             _p1Ammo -= 1;
-            _uiManager.UpdateP1Ammo(_p1Ammo);
+            _uiManager.UpdateP1Ammo(_p1Ammo, _p1MaxAmmo);
             _audioSource.clip = _laserSoundClip;
             _audioSource.Play();
         }
@@ -233,7 +229,7 @@ public class Player : MonoBehaviour
                 Instantiate(_laserPrefab, (new Vector3((transform.position.x - 0.5f), (transform.position.y + 0.5f), 0)), Quaternion.identity);
             }
             _p2Ammo -= 1;
-            _uiManager.UpdateP2Ammo(_p2Ammo);
+            _uiManager.UpdateP2Ammo(_p2Ammo, _p2MaxAmmo);
             _audioSource.clip = _laserSoundClip;
             _audioSource.Play();
         }
@@ -410,13 +406,11 @@ public class Player : MonoBehaviour
         else
         {
             _lives--;
-            //shake the camera.
             StartCoroutine(_cameraShake.Shake(1.0f, 0.15f));
             _audioSource.clip = _damageClip;
             _audioSource.Play();
             CheckDamageVisuals();        
             _uiManager.UpdateLives(_lives);
-
             if (_lives < 1)
             {
                 _spawnManager.OnPlayerDeath();
@@ -494,13 +488,13 @@ public class Player : MonoBehaviour
    public void RefillP1Ammo()
     {
         _p1Ammo = 15;
-        _uiManager.UpdateP1Ammo(_p1Ammo);
+        _uiManager.UpdateP1Ammo(_p1Ammo, _p1MaxAmmo);
     }
 
     public void RefillP2Ammo()
     {
         _p2Ammo = 15;
-        _uiManager.UpdateP2Ammo(_p2Ammo);
+        _uiManager.UpdateP2Ammo(_p2Ammo, _p2MaxAmmo);
     }
 
     public void ShieldsActive()

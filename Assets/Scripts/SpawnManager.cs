@@ -26,11 +26,15 @@ public class SpawnManager : MonoBehaviour
     private GameObject _grassContainer;
     [SerializeField]
     private GameObject _rabbitContainer;
- 
-
     private bool _stopSpawning = false;
     private bool _grassSpawning = true;
   
+
+    //while current wave < target wave
+    //set amt of enemies to spawn this wave
+    //spawn those enemies
+    //increment wave amount
+    //announce current wave
 
     public void StartSpawning()
     {

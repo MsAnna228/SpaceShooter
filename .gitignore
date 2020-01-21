@@ -11,6 +11,7 @@
 /[Mm]emoryCaptures/
 /[Ww]indows Playable Build/
 /[Ww]ebGL Demo/
+/[Ii]OS Build/
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
