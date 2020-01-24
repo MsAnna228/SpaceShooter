@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour
     private Player _player;
     private Animator _enemyAnim;
     private AudioSource _audioSource;
+    private SpawnManager _spawnManager;
 
     [SerializeField]
     private GameObject _fruit;
@@ -25,11 +26,11 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
-        //_player = GameObject.Find("Player").GetComponent<Player>();// there's two players sometimes though.
-        //if (_player == null)
-        //{
-          //  Debug.Log("Player component is NULL");
-        //}
+        _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+        if (_spawnManager == null)
+        {
+            Debug.LogError("Spawn Manager is NULL");
+        }
         _enemyAnim = GetComponent<Animator>();
         if (_enemyAnim == null)
         {
@@ -52,6 +53,7 @@ public class Enemy : MonoBehaviour
             transform.position = new Vector3(randomX, 8, 0);
             if (_enemyAnim.GetBool("OnFruitDrop") == true)
             {
+                _spawnManager.DecreaseSpawnedEnemy();
                 Destroy(this.gameObject);
             }         
         }

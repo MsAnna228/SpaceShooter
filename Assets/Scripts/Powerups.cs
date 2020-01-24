@@ -7,12 +7,11 @@ public class Powerups : MonoBehaviour
     [SerializeField]
     private float _speed = 3.0f;
     [SerializeField]
-    private int powerupID;
-    //0 is for triple shot
-    //1 is for speed
-    //2 is for shields
-    //3 is for refilling spears
-    //4 is for refilling health
+    private int powerupID; //0 is for triple shot
+                           //1 is for speed
+                           //2 is for shields
+                           //3 is for refilling spears
+                           //4 is for refilling health
     [SerializeField]
     private AudioClip _powerupCollectClip;   
 

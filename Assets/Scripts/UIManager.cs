@@ -27,6 +27,10 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text _waveNumberText;
     [SerializeField]
+    private Image _bossHPBar;
+    [SerializeField]
+    private Text _bossHPText;
+    [SerializeField]
     private Button _restartButton;
     [SerializeField]
     private Scene scene;
@@ -107,13 +111,41 @@ public class UIManager : MonoBehaviour
     public void NextWave(int currentWave, int maxWave)
     {
         _waveNumberText.text = "Wave: " + currentWave.ToString() + "/" + maxWave.ToString();
+        _waveNumberText.fontSize = 60;
+        StartCoroutine(WaveTextShowRoutine());
+    }
+
+    public void BossText(string bossName)
+    {
+        _waveNumberText.text = "Boss Incoming!" + bossName;
+        _waveNumberText.fontSize = 45;
+        StartCoroutine(WaveTextShowRoutine());
+    }
+
+    public void BossHealthShow(float health, string name)
+    {
+        _bossHPBar.gameObject.SetActive(true);
+        _bossHPText.text = name;
+        _bossHPText.gameObject.SetActive(true);
+    }
+
+    public void UpdateBossHealth(float health)
+    {
+        _bossHPBar.fillAmount = health / 100.0f;
+        Color _bossColor = Color.Lerp(Color.red, Color.magenta, health / 100.0f);
+        _bossHPBar.color = _bossColor;
+    }
+
+    public void DisplayMessage(string message)
+    {
+        _waveNumberText.text = message;
         StartCoroutine(WaveTextShowRoutine());
     }
 
     IEnumerator WaveTextShowRoutine()
     {
         _waveNumberText.gameObject.SetActive(true);
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
         _waveNumberText.gameObject.SetActive(false);
     }
 

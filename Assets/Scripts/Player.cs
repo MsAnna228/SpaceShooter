@@ -138,7 +138,6 @@ public class Player : MonoBehaviour
         }
 
         _asteroid = GameObject.Find("InitialTree").GetComponent<Asteroid>();
-
         if(_asteroid == null)
         {
             Debug.LogError("Asteroid/Initial Tree is NULL");
@@ -172,7 +171,7 @@ public class Player : MonoBehaviour
         if (isPlayerOne)
         {
             CalculateMovement();
-            if ((Input.GetKeyDown(KeyCode.Space) || CrossPlatformInputManager.GetButtonDown("Fire")) && Time.time > _canFire)
+            if (CrossPlatformInputManager.GetButtonDown("Fire") && Time.time > _canFire)
             {
                 Firing();
             }
@@ -181,7 +180,7 @@ public class Player : MonoBehaviour
         if (isPlayerTwo)
         {
             CalculateMovementPlayerTwo();
-            if ((Input.GetKeyDown(KeyCode.Space) || CrossPlatformInputManager.GetButtonDown("Fire2")) && Time.time > _playerTwoCanFire)
+            if (CrossPlatformInputManager.GetButtonDown("Fire2") && Time.time > _playerTwoCanFire)
             {
                 FiringPlayerTwo();
             }
@@ -536,5 +535,15 @@ public class Player : MonoBehaviour
     {
         score += points;
         _uiManager.UpdateScore(score);     //communicate to UI Manager to update score, we are passing through our current score.
+    }
+
+    public void KnockBack()
+    {
+        int _knockBackAmount = 5;
+        while (_knockBackAmount > 0)
+        {
+            transform.Translate(Vector3.down * _speed * Time.deltaTime);
+            _knockBackAmount--;
+        }
     }
 }

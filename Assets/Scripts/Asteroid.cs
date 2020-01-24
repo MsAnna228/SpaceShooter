@@ -12,6 +12,8 @@ public class Asteroid : MonoBehaviour
     private SpawnManager _spawnManager;
     private StartingGrass _startingGrass;
     public bool gameStarted = false;
+
+    public bool _pastLevelOne = false;
   
 
     void Start()
@@ -21,32 +23,35 @@ public class Asteroid : MonoBehaviour
         {
             Debug.LogError("Spawn Manager is NULL");
         }
-        _startingGrass = GameObject.Find("InitialGrass").GetComponent<StartingGrass>();
-        if(_startingGrass == null)
-        {
-            Debug.LogError("Initial Grass is NULL");
-        }
-        
-    }
 
-    void Update()
-    {
-        //transform.Rotate(0, 0, Time.deltaTime * _speed, Space.Self);
-        //rotate on the zed axis
+        if (_pastLevelOne == false)
+        {
+            _startingGrass = GameObject.Find("InitialGrass").GetComponent<StartingGrass>();
+            if (_startingGrass == null)
+            {
+                Debug.LogError("Initial Grass is NULL");
+            }
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == "Laser")
         {
-            Instantiate(_treePrefab, transform.position, Quaternion.identity);
             Destroy(other.gameObject);
+            Instantiate(_treePrefab, transform.position, Quaternion.identity); //this tree prefab just moves down the screen. 
             _spawnManager.StartSpawning();
-            _startingGrass.StartScrolling();
-            gameStarted = true;
-      
+            if (_pastLevelOne == false)
+            {
+                _startingGrass.StartScrolling(); //if we are past level one this game object is already destroyed so this will throw an error
+            }
+            gameStarted = true;      
             Destroy(gameObject);
         }
+    }  
+    
+    public void PastLevelOne()
+    {
+        _pastLevelOne = true;
     }
-   
 }

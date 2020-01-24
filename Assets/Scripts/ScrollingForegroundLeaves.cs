@@ -4,25 +4,45 @@ using UnityEngine;
 
 public class ScrollingForegroundLeaves : MonoBehaviour
 {
-    //create speed variable
 
     [SerializeField]
     private float _speed = 5f;
-    
-    
-    // Start is called before the first frame update
-    void Start()
+
+    private bool _moving = true;
+    private SpawnManager _spawnManager;
+
+    private void Start()
     {
-        
+        _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+        if (_spawnManager == null)
+        {
+            Debug.LogError("Spawn Manager is NULL");
+        }
+        StartCoroutine(CheckSpeedRoutine());
     }
 
-    // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector3.down * _speed * Time.deltaTime);
-        if (transform.position.y < -11)
+       transform.Translate(Vector3.down * _speed * Time.deltaTime);
+       if (transform.position.y < -11)
+       {
+           Destroy(this.gameObject);
+       }
+    }    
+
+    IEnumerator CheckSpeedRoutine()
+    {
+        while (true)
         {
-            Destroy(this.gameObject);
-        }      
+            yield return new WaitForSeconds(1.0f);
+            if (_spawnManager._grassSpawning)
+            {
+                _speed = 5f;
+            }
+            else
+            {
+                _speed = 0f;
+            }
+        }
     }
 }

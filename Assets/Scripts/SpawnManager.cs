@@ -9,6 +9,8 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject[] powerups;
     [SerializeField]
+    private GameObject[] _bossPrefabs;
+    [SerializeField]
     private GameObject[] foregroundLeaves;
     [SerializeField]
     private GameObject _grassPrefab;
@@ -27,17 +29,31 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject _rabbitContainer;
     private bool _stopSpawning = false;
-    private bool _grassSpawning = true;
-  
+    public bool _grassSpawning = true;
+    private int _currentWave = 1;
+    private int _targetWave = 1;
+    private int _amtToSpawnThisWave;
+    private int _startingAmtToSpawn = 3;
+    private UIManager _uiManager;
+    private int _enemiesLeft;
+    private int _bossNumber = -1; //this is set to -1 because it'll increment to 0, which is the first boss in the array of bosses
 
-    //while current wave < target wave
-    //set amt of enemies to spawn this wave
-    //spawn those enemies
-    //increment wave amount
-    //announce current wave
-
-    public void StartSpawning()
+    private void Start()
     {
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        if (_uiManager == null)
+        {
+            Debug.Log("UIManager is NULL");
+        }
+    }    
+   
+    public void StartSpawning()//coming from asteroid script
+    {
+        _grassSpawning = true;
+
+        _currentWave = 1;
+        _uiManager.NextWave(_currentWave, _targetWave);
+        
         StartCoroutine(SpawnEnemyRoutine());
         StartCoroutine(SpawnPowerupRoutine());
         StartCoroutine(SpawnLeavesRoutine());
@@ -46,21 +62,46 @@ public class SpawnManager : MonoBehaviour
     }
 
     IEnumerator SpawnEnemyRoutine()
-
     {
-        yield return new WaitForSeconds(3.0f);
-        while (_stopSpawning == false)
+        yield return new WaitForSeconds(3.0f); //initially wait for three seconds. this only happens once before the main loop. 
+        _amtToSpawnThisWave = _startingAmtToSpawn; //set total amount to spawn this wave    
+        _enemiesLeft = _amtToSpawnThisWave;                 //reset enemies left and _amt to spawn variables  
+        while (_stopSpawning == false && _currentWave <= _targetWave) 
         {
-            int randomTree = Random.Range(0, 3);
-            Vector3 posToSpawn = new Vector3(Random.Range(-10f, 10f), 8, 0);
-            GameObject newEnemy = Instantiate(_treePrefab[randomTree], posToSpawn, Quaternion.identity);
-            //newEnemy.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);//start small
-            //Color tmp = newEnemy.transform.GetComponent<SpriteRenderer>().color; //get reference to alpha variable
-            //tmp.a = 0f; //set alpha reference to zero
-            //newEnemy.transform.GetComponent<SpriteRenderer>().color = tmp; //update actual to match reference
-            newEnemy.transform.parent = _enemyContainer.transform; 
-            yield return new WaitForSeconds(5.0f);
-        }       
+            while (_enemiesLeft > 0)// wait until we clear all the trees
+            {
+                if (_amtToSpawnThisWave > 0) //spawn trees up to the amt in the wave
+                {
+                    int randomTree = Random.Range(0, 3);
+                    Vector3 posToSpawn = new Vector3(Random.Range(-10f, 10f), 8, 0);
+                    GameObject newEnemy = Instantiate(_treePrefab[randomTree], posToSpawn, Quaternion.identity);
+                    newEnemy.transform.parent = _enemyContainer.transform;
+                    _amtToSpawnThisWave--;   
+                    yield return new WaitForSeconds(0.5f); //new enemy within this wave every () seconds 
+                }
+                yield return new WaitForSeconds(0.5f); //have to have a yield here to not crash the engine. 
+            }
+            yield return new WaitForSeconds(4.0f); //pause between waves is () seconds
+            if (_currentWave < _targetWave)
+            {
+                _currentWave++;
+                _uiManager.NextWave(_currentWave, _targetWave);
+                _amtToSpawnThisWave =+ _currentWave; //amt to spawn increases as waves increase
+                _enemiesLeft = _amtToSpawnThisWave;
+            }
+            else
+            {
+                //_bossNumber++; when I have more than one boss, this will increment up to the next boss
+                _uiManager.BossText(_bossPrefabs[_bossNumber].name.ToString());
+                Instantiate(_bossPrefabs[_bossNumber]);
+                _grassSpawning = false;     
+            }
+        }        
+    }
+       
+    public void DecreaseSpawnedEnemy()
+    {
+        _enemiesLeft--; //once this is at zero that means all the trees in this wave have been cleared. 
     }
 
     IEnumerator SpawnPowerupRoutine()
@@ -78,7 +119,7 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnLeavesRoutine()
     {
-        while (_stopSpawning == false)
+        while (_grassSpawning == true)
         {
             int randomLeaves = Random.Range(0, 3);
             float xToSpawn = 0;
@@ -89,8 +130,7 @@ public class SpawnManager : MonoBehaviour
             else
             {
                 xToSpawn = 0;
-            }
-        
+            }        
             Vector3 posToSpawn = new Vector3(xToSpawn, 14, 0);
             GameObject newLeaves = Instantiate(foregroundLeaves[randomLeaves], posToSpawn, Quaternion.identity);
             newLeaves.transform.parent = _leavesContainer.transform;
@@ -106,12 +146,12 @@ public class SpawnManager : MonoBehaviour
             GameObject newGrass = Instantiate(_grassPrefab, posToSpawn, Quaternion.identity);
             newGrass.transform.parent = _grassContainer.transform;
             yield return new WaitForSeconds(3.0f);
-        }
+        }        
     }
 
     IEnumerator SpawnRabbitRoutine()
     {
-        while (_stopSpawning == false)
+        while (_grassSpawning == true)
         {
             int _xPosToSpawn = Random.Range(0, 2); //will return either 0 or 1
             if (_xPosToSpawn == 1)
