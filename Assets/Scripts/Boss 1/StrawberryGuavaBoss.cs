@@ -149,7 +149,11 @@ public class StrawberryGuavaBoss : MonoBehaviour
 
     void GuavaShield()
     {
-        _guavaShieldPrefab.SetActive(true); 
+        _guavaShieldPrefab.SetActive(true);
+        for (int a = 0; a < _guavaShieldPrefab.transform.childCount; a++)
+        {
+            _guavaShieldPrefab.transform.GetChild(a).gameObject.SetActive(true);
+        }
     }
 
     IEnumerator SendWarningAndAttack()

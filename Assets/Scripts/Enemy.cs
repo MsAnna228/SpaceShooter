@@ -12,8 +12,7 @@ public class Enemy : MonoBehaviour
     private SpawnManager _spawnManager;
 
     [SerializeField]
-    private GameObject _fruit;
-    
+    private GameObject _fruit;    
 
     [SerializeField]
     private float _speed = 4;   
@@ -24,8 +23,19 @@ public class Enemy : MonoBehaviour
     //1 is for papaya
     //2 is for kalo
 
+    private bool _hasShield;
+    private SpriteRenderer _renderer;
+    [SerializeField]
+    private int _health;
+    private Player player;
+
     void Start()
     {
+        _renderer = GetComponent<SpriteRenderer>();
+        if (_renderer == null)
+        {
+            Debug.LogError("spawn manager is NULL!");
+        }
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         if (_spawnManager == null)
         {
@@ -40,10 +50,25 @@ public class Enemy : MonoBehaviour
         if(_audioSource == null)
         {
             Debug.LogError("Audiosource on Enemy is NULL");
-        }        
+        }
+        int chanceOfShield = Random.Range(0, 2);
+        if (chanceOfShield == 0)
+        {            //we have a shield
+            _renderer.color = Color.red;
+            _health = 2;
+        }
+        else
+        {           //we have no shield
+            _renderer.color = Color.white;
+            _health = 1;
+        }
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        if (player == null)
+        {
+            Debug.LogError("Player is NULL");
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);   
@@ -60,34 +85,44 @@ public class Enemy : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D other)
-    {
+    {        
         if (other.gameObject.tag == "Player") 
         {
-            Player player = other.transform.GetComponent<Player>();
+            _health--;
+            _renderer.color = Color.white;
+
             if (player != null && _enemyAnim.GetBool("OnFruitDrop") == false)
             {
                 player.Damage();
             }
-            DropFruit();
-            _enemyAnim.SetBool("OnFruitDrop", true);
-            if (treeID == 0)
+            if (_health < 1)
             {
-                transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);//to compensate for large art. take out later once art is adjusted
+                DropFruit();
+                _enemyAnim.SetBool("OnFruitDrop", true);
+                if (treeID == 0)
+                {
+                    transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);//to compensate for large art. take out later once art is adjusted
+                }
             }
         }     
 
         if (other.gameObject.tag == "Laser")
         {
+            _health--;
+            _renderer.color = Color.white;
             Destroy(other.gameObject);
             if (_player != null)
             {
                 _player.AddScore(10);
             }
-            DropFruit();
-            _enemyAnim.SetBool("OnFruitDrop", true);
-            if (treeID == 0)
+            if (_health < 1)
             {
-                transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);//to compensate for large art. take out later once art is adjusted
+                DropFruit();
+                _enemyAnim.SetBool("OnFruitDrop", true);
+                if (treeID == 0)
+                {
+                    transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);//to compensate for large art. take out later once art is adjusted
+                }
             }
         }
     }
