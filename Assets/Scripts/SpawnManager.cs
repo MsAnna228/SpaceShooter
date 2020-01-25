@@ -38,6 +38,7 @@ public class SpawnManager : MonoBehaviour
     private UIManager _uiManager;
     private int _enemiesLeft;
     private int _bossNumber = 0; //this will be set to -1 once i have more than one boss because it'll increment to 0, which is the first boss in the array of bosses
+    
 
     private void Start()
     {
@@ -68,7 +69,7 @@ public class SpawnManager : MonoBehaviour
     {
         yield return new WaitForSeconds(3.0f); //initially wait for three seconds. this only happens once before the main loop. 
         _amtToSpawnThisWave = _startingAmtToSpawn; //set total amount to spawn this wave    
-        _enemiesLeft = _amtToSpawnThisWave;                 //reset enemies left and _amt to spawn variables  
+        _enemiesLeft = _amtToSpawnThisWave;        //reset enemies left and _amt to spawn variables  
         while (_stopSpawning == false && _currentWave <= _targetWave) 
         {
             while (_enemiesLeft > 0)// wait until we clear all the trees
@@ -113,11 +114,49 @@ public class SpawnManager : MonoBehaviour
         yield return new WaitForSeconds(3.0f);
         while (_powerupSpawning == true)
         {
-            int randomPowerup = Random.Range(0, 5);
-            Vector3 posToSpawn = new Vector3(Random.Range(-9f, 9f), 6, 0);
-            GameObject newPowerup = Instantiate (powerups [randomPowerup], posToSpawn, Quaternion.identity);
-            newPowerup.transform.parent = _powerupContainer.transform;
-            yield return new WaitForSeconds(Random.Range(5.0f, 7.0f));
+            float random = Random.Range(0, 100); // draw a number between 0 and 99
+            int lowLim;    // lowLim and hiLim are automatically set for each powerup
+            int hiLim;
+
+            int randomPowerup = Random.Range(0, 5);  
+            int chanceToSpawn;
+
+            switch (randomPowerup) //matched to what's assigned in inspector
+            {
+                case 0:
+                    chanceToSpawn = 50;
+                    //triple shot
+                    break;
+                case 1:
+                    chanceToSpawn = 70;
+                    //speed up
+                    break;
+
+                case 2:
+                    chanceToSpawn = 70;
+                    //shield
+                    break;
+                case 3:
+                    chanceToSpawn = 100;
+                    //ammo refil
+                    break;
+                case 4:
+                    chanceToSpawn = 30;
+                    //health pickup
+                    break;
+                default:
+                    chanceToSpawn = 100;
+                    break;
+            }
+            lowLim = 0;
+            hiLim = chanceToSpawn;
+            if (random >= lowLim && random < hiLim) 
+            {
+                Vector3 posToSpawn = new Vector3(Random.Range(-9f, 9f), 6, 0);
+                GameObject newPowerup = Instantiate(powerups[randomPowerup], posToSpawn, Quaternion.identity);
+                newPowerup.transform.parent = _powerupContainer.transform;
+            }
+            yield return new WaitForSeconds(Random.Range(1.0f, 3.0f));
         }
     }
 

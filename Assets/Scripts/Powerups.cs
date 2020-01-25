@@ -16,6 +16,7 @@ public class Powerups : MonoBehaviour
     private AudioClip _powerupCollectClip;
     private GameObject _player;
 
+
     private void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player");
