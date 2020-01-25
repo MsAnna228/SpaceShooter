@@ -701,6 +701,7 @@ MonoBehaviour:
   - {fileID: 1979693477072043074, guid: 3fe5ecf70d6dc924cb131c95e46a10bc, type: 3}
   - {fileID: 3234738809035301468, guid: 403dca9ba1d77bc418a406855a556c6e, type: 3}
   - {fileID: 87726160622708336, guid: b24846da38d33c249a82cbec689b2138, type: 3}
+  - {fileID: 784464106546651039, guid: 2864e129d6ce547419e760848aa60e53, type: 3}
   _bossPrefabs:
   - {fileID: 7956697829511576370, guid: 3b038ea6b6b094f4b81d450c5ac149d6, type: 3}
   foregroundLeaves:
@@ -717,6 +718,7 @@ MonoBehaviour:
   _grassContainer: {fileID: 1055316477}
   _rabbitContainer: {fileID: 62172278}
   _grassSpawning: 1
+  _powerupSpawning: 1
 --- !u!4 &313160536
 Transform:
   m_ObjectHideFlags: 0

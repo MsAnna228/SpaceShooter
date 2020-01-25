@@ -118,7 +118,7 @@ public class SpawnManager : MonoBehaviour
             int lowLim;    // lowLim and hiLim are automatically set for each powerup
             int hiLim;
 
-            int randomPowerup = Random.Range(0, 5);  
+            int randomPowerup = Random.Range(0, 6);  
             int chanceToSpawn;
 
             switch (randomPowerup) //matched to what's assigned in inspector
@@ -131,7 +131,6 @@ public class SpawnManager : MonoBehaviour
                     chanceToSpawn = 70;
                     //speed up
                     break;
-
                 case 2:
                     chanceToSpawn = 70;
                     //shield
@@ -143,6 +142,10 @@ public class SpawnManager : MonoBehaviour
                 case 4:
                     chanceToSpawn = 30;
                     //health pickup
+                    break;
+                case 5:
+                    chanceToSpawn = 80;
+                    //mud puddle negative pickup
                     break;
                 default:
                     chanceToSpawn = 100;

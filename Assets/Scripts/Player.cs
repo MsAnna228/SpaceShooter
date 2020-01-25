@@ -527,6 +527,10 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(5.0f);
         _speed /= _speedMultiplier;
+        if (_speed < _minSpeed)
+        {
+            _speed = _minSpeed;
+        }
         _playerAnim.SetBool("OnPuaa", false);
         Instantiate(_puaaRunAwayPrefab, transform.position, Quaternion.identity);
     }
@@ -545,5 +549,20 @@ public class Player : MonoBehaviour
             transform.Translate(Vector3.down * _speed * Time.deltaTime);
             _knockBackAmount--;
         }
+    }
+
+    public void SlowDownPlayer()
+    {
+        StartCoroutine(SlowDown());
+    }
+      
+    IEnumerator SlowDown()
+    {
+        StartCoroutine(_cameraShake.Shake(1.0f, 0.1f));
+        _spriteRenderer.color = Color.gray;
+        _speed = 2;
+        yield return new WaitForSeconds(3.0f);
+        _speed = _minSpeed;
+        _spriteRenderer.color = Color.white;        
     }
 }

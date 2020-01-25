@@ -12,6 +12,7 @@ public class Powerups : MonoBehaviour
                            //2 is for shields
                            //3 is for refilling spears
                            //4 is for refilling health
+                           //5 is for negative pickup - slow down
     [SerializeField]
     private AudioClip _powerupCollectClip;
     private GameObject _player;
@@ -84,6 +85,10 @@ public class Powerups : MonoBehaviour
 
                     case 4:
                         player.RefillHealth();
+                        break;
+
+                    case 5:
+                        player.SlowDownPlayer();
                         break;
 
                     default:
