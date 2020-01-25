@@ -30,7 +30,7 @@ public class StrawberryGuavaBoss : MonoBehaviour
     private Vector3 startPoint;                 // Starting position of the guava
     private const float radius = 1F;
     private float _canFire = -5;
-    private float _fireRate = 5.0f;
+    private float _fireRate = 10.0f;
     private float _canRegenShield = -1;
     private float _shieldRegenRate = 30f;
     private float _canSpawnTree = -1;
@@ -190,7 +190,6 @@ public class StrawberryGuavaBoss : MonoBehaviour
         GameObject _newInitialTree = Instantiate(_initialTree, transform.position, Quaternion.identity);
         Asteroid _asteroid = _newInitialTree.GetComponent<Asteroid>();
         _asteroid.PastLevelOne();
-
         Destroy(this.gameObject);
     }
 }

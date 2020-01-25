@@ -30,13 +30,14 @@ public class SpawnManager : MonoBehaviour
     private GameObject _rabbitContainer;
     private bool _stopSpawning = false;
     public bool _grassSpawning = true;
+    public bool _powerupSpawning = true;
     private int _currentWave = 1;
     private int _targetWave = 1;
     private int _amtToSpawnThisWave;
     private int _startingAmtToSpawn = 3;
     private UIManager _uiManager;
     private int _enemiesLeft;
-    private int _bossNumber = -1; //this is set to -1 because it'll increment to 0, which is the first boss in the array of bosses
+    private int _bossNumber = 0; //this will be set to -1 once i have more than one boss because it'll increment to 0, which is the first boss in the array of bosses
 
     private void Start()
     {
@@ -50,9 +51,11 @@ public class SpawnManager : MonoBehaviour
     public void StartSpawning()//coming from asteroid script
     {
         _grassSpawning = true;
-
+        _powerupSpawning = true;
+        _stopSpawning = false;
         _currentWave = 1;
         _uiManager.NextWave(_currentWave, _targetWave);
+        _startingAmtToSpawn++;
         
         StartCoroutine(SpawnEnemyRoutine());
         StartCoroutine(SpawnPowerupRoutine());
@@ -91,7 +94,8 @@ public class SpawnManager : MonoBehaviour
             }
             else
             {
-                //_bossNumber++; when I have more than one boss, this will increment up to the next boss
+                //_bossNumber++; when there is more than one boss uncomment this and make sure to set it to -1 before start. 
+                _stopSpawning = true;
                 _uiManager.BossText(_bossPrefabs[_bossNumber].name.ToString());
                 Instantiate(_bossPrefabs[_bossNumber]);
                 _grassSpawning = false;     
@@ -107,7 +111,7 @@ public class SpawnManager : MonoBehaviour
     IEnumerator SpawnPowerupRoutine()
     {
         yield return new WaitForSeconds(3.0f);
-        while (_stopSpawning == false)
+        while (_powerupSpawning == true)
         {
             int randomPowerup = Random.Range(0, 5);
             Vector3 posToSpawn = new Vector3(Random.Range(-9f, 9f), 6, 0);

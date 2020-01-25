@@ -13,16 +13,42 @@ public class Powerups : MonoBehaviour
                            //3 is for refilling spears
                            //4 is for refilling health
     [SerializeField]
-    private AudioClip _powerupCollectClip;   
+    private AudioClip _powerupCollectClip;
+    private GameObject _player;
+
+    private void Start()
+    {
+        _player = GameObject.FindGameObjectWithTag("Player");
+        if (_player == null)
+        {
+            Debug.LogError("Player is NULL");
+        }
+    }
 
 
     void Update()
     {
-        transform.Translate(Vector3.down * _speed * Time.deltaTime);
+        if (Input.GetKeyDown(KeyCode.C)) //pickup collect
+        {
+            StartCoroutine(GlideToPlayer());
+        }
+        else
+        {
+            transform.Translate(Vector3.down * _speed * Time.deltaTime);
+        }
         if (transform.position.y < -6)
         {
             Destroy(gameObject);
         }        
+    }
+
+    IEnumerator GlideToPlayer()
+    { 
+        while (transform.position != _player.transform.position)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, _player.transform.position, _speed * 2 * Time.deltaTime);
+            yield return new WaitForSeconds(0.01f);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -60,7 +86,6 @@ public class Powerups : MonoBehaviour
                         break;
 
                     default:
-                        Debug.Log("default value");
                         break;
                 }                             
             }        
