@@ -117,7 +117,7 @@ public class UIManager : MonoBehaviour
 
     public void BossText(string bossName)
     {
-        _waveNumberText.text = "Boss Incoming!" + bossName;
+        _waveNumberText.text = "Boss Incoming! " + bossName;
         _waveNumberText.fontSize = 45;
         StartCoroutine(WaveTextShowRoutine());
     }

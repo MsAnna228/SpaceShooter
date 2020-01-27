@@ -70,7 +70,7 @@ public class StrawberryGuavaBoss : MonoBehaviour
     {
         while (transform.position.y > 3.3)
         {
-            transform.Translate(Vector3.down * Time.deltaTime);
+            transform.Translate(Vector3.down * 6 * Time.deltaTime);
             yield return new WaitForSeconds(0.01f);
         }
     }
@@ -190,7 +190,7 @@ public class StrawberryGuavaBoss : MonoBehaviour
 
     IEnumerator BossDefeated()
     {
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(10.0f);
         GameObject _newInitialTree = Instantiate(_initialTree, transform.position, Quaternion.identity);
         Asteroid _asteroid = _newInitialTree.GetComponent<Asteroid>();
         _asteroid.PastLevelOne();

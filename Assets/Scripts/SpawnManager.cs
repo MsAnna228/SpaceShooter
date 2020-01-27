@@ -76,7 +76,7 @@ public class SpawnManager : MonoBehaviour
             {
                 if (_amtToSpawnThisWave > 0) //spawn trees up to the amt in the wave
                 {
-                    int randomTree = Random.Range(0, 3);
+                    int randomTree = Random.Range(0, 4);
                     Vector3 posToSpawn = new Vector3(Random.Range(-10f, 10f), 8, 0);
                     GameObject newEnemy = Instantiate(_treePrefab[randomTree], posToSpawn, Quaternion.identity);
                     newEnemy.transform.parent = _enemyContainer.transform;

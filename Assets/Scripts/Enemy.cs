@@ -22,6 +22,8 @@ public class Enemy : MonoBehaviour
     //0 is for banana
     //1 is for papaya
     //2 is for kalo
+    //3 is for beehive
+
 
     private bool _hasShield;
     private SpriteRenderer _renderer;
@@ -132,7 +134,7 @@ public class Enemy : MonoBehaviour
         if (_enemyAnim.GetBool("OnFruitDrop") == false)
         {
             _audioSource.Play();
-            int fruitAmount = Random.Range(0, 3);
+            int fruitAmount = Random.Range(1, 4);
             while (fruitAmount > 0)
             {
                 fruitAmount--;

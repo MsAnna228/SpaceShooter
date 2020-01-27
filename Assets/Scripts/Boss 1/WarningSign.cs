@@ -5,8 +5,7 @@ using UnityEngine;
 public class WarningSign : MonoBehaviour
 {
 
-
-    private void Start()
+    private void Update()
     {
         StartCoroutine(FlickerRoutine());
     }
