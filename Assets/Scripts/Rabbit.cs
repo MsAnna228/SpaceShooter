@@ -39,6 +39,7 @@ public class Rabbit : MonoBehaviour
             {
                 player.Damage();
                 _hurtPlayer = true;
+                _speed = 6.0f;
             }
         }
     }

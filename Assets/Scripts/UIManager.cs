@@ -33,6 +33,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Button _restartButton;
     [SerializeField]
+    private Image _eggSplat;
+    [SerializeField]
     private Scene scene;
     [SerializeField]
     private GameManager _gameManager;   
@@ -40,6 +42,7 @@ public class UIManager : MonoBehaviour
     private int _highScore;
     private Color p1Color = Color.green;
     private Color p2Color = Color.green;
+    private Color _eggSplatAlpha;
 
     void Start()
     {
@@ -49,6 +52,8 @@ public class UIManager : MonoBehaviour
         _highScoreText.text = "Best: " + PlayerPrefs.GetInt("HighScore");
         _restartButton.gameObject.SetActive(false);
         _highScore = PlayerPrefs.GetInt("HighScore");
+        _eggSplatAlpha = _eggSplat.GetComponent<Image>().color;
+
     }
 
     private void Awake()
@@ -140,6 +145,25 @@ public class UIManager : MonoBehaviour
     {
         _waveNumberText.text = message;
         StartCoroutine(WaveTextShowRoutine());
+    }
+
+    public void EggSplat()
+    {
+        _eggSplat.gameObject.SetActive(true);
+        _eggSplatAlpha.a = 1;
+        StartCoroutine(EggFadeOut());
+    }
+
+    IEnumerator EggFadeOut()
+    {
+        while (_eggSplatAlpha.a > 0.4)
+        {
+            yield return new WaitForSeconds(0.1f);
+            _eggSplatAlpha = _eggSplat.GetComponent<Image>().color;
+            _eggSplatAlpha.a -= 0.005f;
+            _eggSplat.GetComponent<Image>().color = _eggSplatAlpha;
+        }
+        _eggSplat.gameObject.SetActive(false);
     }
 
     IEnumerator WaveTextShowRoutine()

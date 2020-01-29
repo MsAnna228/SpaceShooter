@@ -11,7 +11,9 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject[] _bossPrefabs;
     [SerializeField]
-    private GameObject[] foregroundLeaves;
+    private GameObject[] _foregroundLeaves;
+    [SerializeField]
+    private GameObject[] _animalPrefabs;
     [SerializeField]
     private GameObject _grassPrefab;
     [SerializeField]
@@ -27,7 +29,7 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject _grassContainer;
     [SerializeField]
-    private GameObject _rabbitContainer;
+    private GameObject _animalContainer;
     private bool _stopSpawning = false;
     public bool _grassSpawning = true;
     public bool _powerupSpawning = true;
@@ -62,7 +64,7 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(SpawnPowerupRoutine());
         StartCoroutine(SpawnLeavesRoutine());
         StartCoroutine(SpawnGrassRoutine());
-        StartCoroutine(SpawnRabbitRoutine());
+        StartCoroutine(SpawnAnimalRoutine());
     }
 
     IEnumerator SpawnEnemyRoutine()
@@ -178,7 +180,7 @@ public class SpawnManager : MonoBehaviour
                 xToSpawn = 0;
             }        
             Vector3 posToSpawn = new Vector3(xToSpawn, 14, 0);
-            GameObject newLeaves = Instantiate(foregroundLeaves[randomLeaves], posToSpawn, Quaternion.identity);
+            GameObject newLeaves = Instantiate(_foregroundLeaves[randomLeaves], posToSpawn, Quaternion.identity);
             newLeaves.transform.parent = _leavesContainer.transform;
             yield return new WaitForSeconds(3.0f);
         }
@@ -195,7 +197,8 @@ public class SpawnManager : MonoBehaviour
         }        
     }
 
-    IEnumerator SpawnRabbitRoutine()
+    
+    IEnumerator SpawnAnimalRoutine()
     {
         while (_grassSpawning == true)
         {
@@ -209,8 +212,8 @@ public class SpawnManager : MonoBehaviour
                 _xPosToSpawn = -12;
             }
             Vector3 posToSpawn = new Vector3(_xPosToSpawn, Random.Range(-6.0f, 6.0f), 0); //needs to pick a random y, and also choose between x as -10 or +10
-            GameObject newRabbit = Instantiate(_rabbit, posToSpawn, Quaternion.identity);
-            newRabbit.transform.parent = _rabbitContainer.transform;
+            GameObject newAnimal = Instantiate(_animalPrefabs[Random.Range(0, 2)], posToSpawn, Quaternion.identity);
+            newAnimal.transform.parent = _animalContainer.transform;
             yield return new WaitForSeconds(5.0f);
         }
     }
