@@ -23,13 +23,14 @@ public class Enemy : MonoBehaviour
     //1 is for papaya
     //2 is for kalo
     //3 is for beehive
-
+    //4 is for vine
 
     private bool _hasShield;
     private SpriteRenderer _renderer;
     [SerializeField]
     private int _health;
     private Player player;
+    private bool _sliding = false;
 
     void Start()
     {
@@ -106,27 +107,49 @@ public class Enemy : MonoBehaviour
                     transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);//to compensate for large art. take out later once art is adjusted
                 }
             }
-        }     
+        }
 
-        if (other.gameObject.tag == "Laser")
+        if (other.gameObject.tag == "Laser" && _sliding == false)
         {
-            _health--;
-            _renderer.color = Color.white;
-            Destroy(other.gameObject);
-            if (_player != null)
+            if (other.gameObject.transform.position.y < (transform.position.y - 2) && treeID == 4)
             {
-                _player.AddScore(10);
+                Debug.Log("laser detected, going to move");
+                _sliding = true;
+                StartCoroutine(SlideToTheRight());
+
             }
-            if (_health < 1)
+            else if (_sliding == false)
             {
-                DropFruit();
-                _enemyAnim.SetBool("OnFruitDrop", true);
-                if (treeID == 0)
+                _health--;
+                _renderer.color = Color.white;
+                Destroy(other.gameObject);
+                if (_player != null)
                 {
-                    transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);//to compensate for large art. take out later once art is adjusted
+                    _player.AddScore(10);
+                }
+                if (_health < 1)
+                {
+                    DropFruit();
+                    _enemyAnim.SetBool("OnFruitDrop", true);
+                    if (treeID == 0)
+                    {
+                        transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);//to compensate for large art. take out later once art is adjusted
+                    }
                 }
             }
         }
+    }
+
+    IEnumerator SlideToTheRight()
+    {
+        float slideTime = 5.0f;
+        while (slideTime > 0)
+        {
+            transform.Translate(Vector3.right * Time.deltaTime);
+            yield return new WaitForSeconds(0.01f);
+            slideTime -= 0.1f;
+        }
+        _sliding = false;
     }
 
     void DropFruit()
