@@ -8,6 +8,8 @@ TagManager:
   - Laser
   - Fruit
   - SpearRefill
+  - Powerup
+  - Enemy Weapon
   layers:
   - Default
   - TransparentFX

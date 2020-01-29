@@ -17,6 +17,7 @@ public class Pueo : MonoBehaviour
 
     private float _speedModifier;
     private bool _eggDropped = false;
+    private bool _attackedPowerup = false;
 
     private void Start()
     {
@@ -65,6 +66,11 @@ public class Pueo : MonoBehaviour
                 _speed = 6.0f;
             }
         }
+        if (other.gameObject.tag == "Powerup" && _attackedPowerup == false) //attached collider that extends below the pueo so it can tell if powerups are below it. 
+        {
+            StartCoroutine(DropAnEgg());
+            _attackedPowerup = true;
+        }
     }
 
     IEnumerator DropAnEgg()
@@ -72,8 +78,6 @@ public class Pueo : MonoBehaviour
         Instantiate(_eggPrefab, transform.position, Quaternion.identity);
         yield return new WaitForSeconds(1.0f);
         _eggDropped = false;
-
-
+        _attackedPowerup = false;
     }
-
 }

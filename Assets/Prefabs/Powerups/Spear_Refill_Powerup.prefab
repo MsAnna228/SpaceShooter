@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 111983674541700143}
   m_Layer: 0
   m_Name: Spear_Refill_Powerup
-  m_TagString: SpearRefill
+  m_TagString: Powerup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

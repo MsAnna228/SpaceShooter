@@ -97,5 +97,10 @@ public class Powerups : MonoBehaviour
             }        
             Destroy(gameObject);            
         }
+
+        if (other.gameObject.tag == "Enemy Weapon")
+        {
+            Destroy(gameObject);
+        }
     }
 }
